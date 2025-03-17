@@ -2,9 +2,11 @@ import React from 'react';
 
 import { sample } from '../../utils';
 import { WORDS } from '../../data';
-
-import GuessInput from '../GuessInput/GuessInput';
-import GuessResults from '../GuessResults/GuessResults';
+import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
+import GuessInput from '../GuessInput';
+import GuessResults from '../GuessResults';
+import HappyBanner from '../HappyBanner';
+import SadBanner from '../SadBanner';
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
@@ -18,9 +20,22 @@ function Game() {
     setGuesses([...guesses, guess])
   }
 
+  const lastGuess = guesses[guesses.length - 1];
+  const guessedAnswer = lastGuess === answer;
+  const maxGuessesReached = guesses.length >= NUM_OF_GUESSES_ALLOWED;
+  const gameIsOver = maxGuessesReached || guessedAnswer
+
   return <>
     <GuessResults guesses={guesses} answer={answer}/>
-    <GuessInput handleSubmitGuess={handleSubmitGuess}/>
+    GAME OVER: {gameIsOver}
+    <GuessInput handleSubmitGuess={handleSubmitGuess} disabled={gameIsOver}/>
+    {
+      guessedAnswer ? 
+        <HappyBanner numGuesses={guesses.length}/> :
+        gameIsOver ? 
+          <SadBanner answer={answer} /> :
+          undefined
+    }
   </>;
 }
 
