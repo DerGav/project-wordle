@@ -27,7 +27,6 @@ function Game() {
 
   return <>
     <GuessResults guesses={guesses} answer={answer}/>
-    GAME OVER: {gameIsOver}
     <GuessInput handleSubmitGuess={handleSubmitGuess} disabled={gameIsOver}/>
     {
       guessedAnswer ? 
