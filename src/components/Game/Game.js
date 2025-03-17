@@ -8,16 +8,21 @@ import GuessResults from '../GuessResults';
 import HappyBanner from '../HappyBanner';
 import SadBanner from '../SadBanner';
 
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
 
 function Game() {
+  const pickAnswer = () => sample(WORDS);
+
+  const [answer, setAnswer] = React.useState(pickAnswer)
+
   const [guesses, setGuesses] = React.useState([])
 
   const handleSubmitGuess = (guess) => {
     setGuesses([...guesses, guess])
+  }
+
+  const resetGame = () => {
+    setAnswer(pickAnswer())
+    setGuesses([])
   }
 
   const lastGuess = guesses[guesses.length - 1];
@@ -26,6 +31,7 @@ function Game() {
   const gameIsOver = maxGuessesReached || guessedAnswer
 
   return <>
+    <button onClick={resetGame}>Restart</button>
     <GuessResults guesses={guesses} answer={answer}/>
     <GuessInput handleSubmitGuess={handleSubmitGuess} disabled={gameIsOver}/>
     {
